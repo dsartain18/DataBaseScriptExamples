@@ -81,7 +81,7 @@ BEGIN
 
 	--RESTORE FILELISTONLY FROM DISK = 'C:\Program Files\Microsoft SQL Server\MSSQL14.MSSQLSERVER2017\MSSQL\Backup\Testing.bak'
 
-	RESTORE DATABASE @NewName FROM  DISK = @FileName WITH  FILE = 8,  
+	RESTORE DATABASE @NewName FROM  DISK = @FileName WITH  FILE = 1,  
 	MOVE @MDFLogicalName TO @NewMDF,  
 	MOVE @LDFLogicalName TO @NewLDF,  NOUNLOAD,  STATS = 5
 
