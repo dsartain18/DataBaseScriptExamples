@@ -1,12 +1,19 @@
 USE [Testing]
 GO
 
-/****** Object:  StoredProcedure [dbo].[DataBaseClone]    Script Date: 3/15/2018 12:49:10 PM ******/
+/****** Object:  StoredProcedure [dbo].[DataBaseClone]    Script Date: 4/17/2018 9:09:13 PM ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DataBaseClone]') AND type in (N'P', N'PC'))
+BEGIN
+	DROP PROCEDURE [dbo].[DataBaseClone]
+END
+GO
+
 
 
 -- =============================================
@@ -18,7 +25,8 @@ CREATE PROCEDURE [dbo].[DataBaseClone]
 	-- Add the parameters for the stored procedure here
 	@DBToCopy VARCHAR(100), 
 	@NewName VARCHAR(100),
-	@BackupPath VARCHAR(MAX)
+	@BackupPath VARCHAR(MAX),
+	@DataPath VARCHAR(MAX)
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -28,12 +36,10 @@ BEGIN
 	DECLARE 
 		@FileName NVARCHAR(MAX),
 		@NewMDF NVARCHAR(MAX),
-		@NewLDF NVARCHAR(MAX),
-		@DataPath NVARCHAR(MAX),
+		@NewLDF NVARCHAR(MAX),		
 		@MDFLogicalName NVARCHAR(128),
 		@LDFLogicalName NVARCHAR(128)
-
-	SET @DataPath = N'C:\Program Files\Microsoft SQL Server\MSSQL14.MSSQLSERVER2017\MSSQL\DATA'
+	
 	SET @FileName = @BackupPath + '\' + @DBToCopy + '.bak'
 	
 	SET @NewMDF = @DataPath + '\' + @NewName + '.mdf';
@@ -86,6 +92,7 @@ BEGIN
 	MOVE @LDFLogicalName TO @NewLDF,  NOUNLOAD,  STATS = 5
 
 END
+
 GO
 
 
